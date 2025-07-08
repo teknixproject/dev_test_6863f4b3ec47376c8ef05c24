@@ -160,24 +160,14 @@ const GridSystemContainer: FC<GridSystemProps> = ({
   style,
 }) => {
   const config = page;
-  const { handleAction } = useActions(config);
-  const onPageLoad = useMemo(() => config?.actions?.onPageLoad, [config?.actions]);
-  console.log('🚀 ~ onPageLoad:', onPageLoad);
-
-  const { isLoading } = useQuery({
-    queryKey: [onPageLoad],
-    queryFn: async () => {
-      await handleAction('onPageLoad');
-      return true;
-    },
-    enabled: !!onPageLoad,
-    staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false,
-  });
+  const { isLoading } = useActions(config);
 
   if (isLoading) return <LoadingPage />;
   return (
-    <div className={cn('', isBody ? 'z-1 min-h-screen' : '', isFooter ? 'z-3' : '')} style={style}>
+    <div
+      className={cn('relative', isBody ? 'z-1 min-h-screen' : '', isFooter ? 'z-3' : '')}
+      style={style}
+    >
       {config?.childs?.map((item) => (
         <RenderSliceItem data={item} key={item.id} />
       ))}
